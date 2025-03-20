@@ -1,20 +1,45 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, ActivityIndicator, Alert } from 'react-native';
 import { primarycolor, redcolor } from './constant';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon library
+
 
 const AddDriverForm = ({ visible, onClose, onAdd }) => {
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleAddDriver = () => {
-    if (!name || !mobile) {
-      alert('Please enter both Name and Mobile Number');
+  const handleAddDriver = async () => {
+    if (!name || !mobile || mobile.length !== 10) {
+      Alert.alert('Validation Failed','Please enter both Name and a valid 10-digit Mobile Number');
       return;
     }
-    onAdd({ id: Date.now(), name, mobile });
-    setName('');
-    setMobile('');
-    onClose();
+
+    setLoading(true);
+    try {
+      const response = await fetch('https://trackme.tranzol.com/Services/TrackMe/AddDriver/AddDriver', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Name: name, MobileNo: mobile })
+      });
+
+      const result = await response.json();
+      console.log(result);
+      
+      if (response.ok) {
+        onAdd({ id: Date.now(), name, mobile });
+        setName('');
+        setMobile('');
+        onClose();
+        Alert.alert('successfuly','Add driver')
+      } else {
+        Alert.alert('Failed to add driver');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('An error occurred');
+    }
+    setLoading(false);
   };
 
   return (
@@ -35,12 +60,21 @@ const AddDriverForm = ({ visible, onClose, onAdd }) => {
             value={mobile}
             onChangeText={setMobile}
           />
-          <TouchableOpacity style={styles.addButton} onPress={handleAddDriver}>
-            <Text style={styles.addButtonText}>Add Driver</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Close</Text>
-          </TouchableOpacity>
+         <TouchableOpacity style={styles.addButton} onPress={handleAddDriver} disabled={loading}>
+  {loading ? (
+    <ActivityIndicator color="#fff" />
+  ) : (
+    <Text style={styles.addButtonText}>
+      <Icon name="plus" size={16} color="#fff" /> Add Driver
+    </Text>
+  )}
+</TouchableOpacity>
+
+<TouchableOpacity style={styles.closeButton} onPress={onClose} disabled={loading}>
+  <Text style={styles.closeButtonText}>
+    <Icon name="close" size={16} color="#fff" /> Close
+  </Text>
+</TouchableOpacity>
         </View>
       </View>
     </Modal>

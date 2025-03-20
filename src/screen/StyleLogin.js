@@ -27,16 +27,16 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     backgroundColor: 'white',
-    height: screenHeight * 0.7,
+    height: screenHeight * 0.52,
     width: '100%',
     marginTop: 'auto',
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    //borderTopRightRadius: 20,
+    borderTopLeftRadius: 60,
     elevation: 4,
   },
   header: {
     marginLeft: 30,
-    marginTop: 40,
+    marginTop: 50,
   },
   headerText1: {
     fontSize: 32,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: primarycolor,
-    width: '70%',
+    width: '80%',
     height: 50,
     borderRadius: 20,
     elevation: 4,

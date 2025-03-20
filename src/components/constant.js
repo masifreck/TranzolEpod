@@ -1,10 +1,11 @@
 
 
 export const textcolor='#1b263b'
-export const textcolor2='#38435E'
-export const primarycolor='#05668d'
-export const secondarcolor='#05668d'
+export const textcolor2='#FC8019'
+export const primarycolor='#FC8019'
+export const secondarcolor='#FC8019'
 export const greencolor='#4c956c'
+export const url='https://trackme.tranzol.com/Services/TrackMe/AddDriver/AddDriver'
 
 export const redcolor='#d90429'
 

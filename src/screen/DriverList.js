@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
     elevation: 3,
-    margin:10
+    marginHorizontal:10,
+    marginVertical:2
   },
   driverName: {
     fontSize: 18,

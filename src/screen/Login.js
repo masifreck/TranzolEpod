@@ -27,7 +27,7 @@ const LoginPage = ({navigation}) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
  
   const handlePasswordToggle = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -40,17 +40,50 @@ const LoginPage = ({navigation}) => {
 
   const validation = () => {
     if (!username.trim()) {
-      setModalMessage('Please Enter Username');
+      setModalMessage('Please Enter Mobile No');
       setIsModalVisible(true);
       return false;
     }
-    if (!password.trim()) {
-      setModalMessage('Please Enter Password');
+    if (username.length !== 10 || !/^\d{10}$/.test(username)) {
+      setModalMessage("Please enter a valid 10-digit mobile number");
       setIsModalVisible(true);
-      return false;
+      return;
     }
     return true;
   };
+
+  const sendOtp = async () => {
+    if (!validation()) return;
+    setLoading(true);
+    try {
+      const response = await fetch("https://trackme.tranzol.com/Services/TrackMe/Login/SendOtp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ TelephoneNo: username }),
+      });
+
+      const data = await response.json();
+      setLoading(false);
+console.log(data)
+      if (data.Success) {
+       // Alert.alert("Success", data.Message);
+        setModalMessage(`success: ${data.Message}`);
+        navigation.navigate('verifyotp',{username});
+      } else {
+        //Alert.alert("Error", "Failed to send OTP.");
+        setModalMessage(`Error: ${data.Message}`);
+      }
+    } catch (error) {
+      setLoading(false);
+      setModalMessage(`Error: ${error.Message}`);
+    } finally {
+      setIsModalVisible(true);
+      
+    }
+  }
+
 
   const handleSubmit = async () => {
     if (!validation()) return;
@@ -108,43 +141,36 @@ const LoginPage = ({navigation}) => {
           />
           <Text style={styles.logoText}>TRANZOL</Text>
         </View>
+        <View style={{marginLeft:'auto',marginRight:'auto',alignItems:'center',backgroundColor:'rgba(0,0,0,0.1)',borderRadius:125,margin:10}}>
+        <Image 
+style={{width:250,height:250}}
+source={require('../assests/otpicon.png')}/>
+
+        </View>
 
         <View style={styles.loginContainer}>
           <View style={styles.header}>
             <Text style={styles.headerText1}>Proceed with your</Text>
-            <Text style={styles.headerText2}>Login</Text>
+            <Text style={styles.headerText2}>Mobile No.</Text>
+            <Text style={{textAlign:'left',color:'black',fontSize:16,margin:10}}>We need to send OTP to authenticate your mobile no.</Text>
           </View>
 
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder="Enter Username"
+              placeholder="Enter Mobile No."
               value={username}
               onChangeText={setUsername}
               style={styles.input}
+              keyboardType='numeric'
             />
-            <View style={styles.passwordContainer}>
-              <TextInput
-                placeholder="Enter Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!isPasswordVisible}
-                style={styles.passwordInput}
-              />
-              <TouchableOpacity onPress={handlePasswordToggle}>
-                <Icon
-                  name={isPasswordVisible ? 'eye-off' : 'eye'}
-                  size={24}
-                  color={textcolor}
-                />
-              </TouchableOpacity>
-            </View>
+       
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={()=>{navigation.navigate('Dashboard')}}
+              onPress={()=>{navigation.navigate('verifyotp',{username:username});}}
               disabled={isLoading}
             >
               <Text style={styles.submitButtonText}>
-                {isLoading ? 'Loading...' : 'SUBMIT'}
+                {isLoading ? 'Loading...' : 'Generate OTP'}
               </Text>
             </TouchableOpacity>
           </View>

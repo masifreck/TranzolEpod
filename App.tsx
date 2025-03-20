@@ -10,6 +10,7 @@ import Dashboard from './src/screen/Dashboard';
 import ManageDrivers from './src/screen/ManageDrivers';
 import Report from './src/screen/Report';
 import DriverList from './src/screen/DriverList';
+import VerifyOTP from './src/screen/VerifyOTP';
 
 
 
@@ -28,6 +29,11 @@ function App() {
        name='login'
        component={LoginPage}
        options={{headerShown: false}}
+       />
+       <Stack.Screen 
+       name='verifyotp'
+       component={VerifyOTP}
+       options={{headerShown:false}}
        />
        <Stack.Screen 
        name='Dashboard'

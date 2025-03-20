@@ -62,7 +62,7 @@ const Dashboard = ({navigation}) => {
                     height: 40,
                     width: 40,
                     resizeMode: 'contain',
-                    //backgroundColor: 'white',
+                    backgroundColor: 'white',
                     borderRadius: 5,
                   }}
                   source={require('../assests/tranzol.png')}

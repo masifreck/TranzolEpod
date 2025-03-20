@@ -37,7 +37,8 @@ const Report = () => {
         data={filteredDrivers}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={[styles.driverCard,  {backgroundColor: item.id % 2 === 0 ? '#F8ECD9' : '#F8ECE8'}]}>
+          <View style={[styles.driverCard,  //{backgroundColor: item.id % 2 === 0 ? '#F8ECD9' : '#F8ECE8'}
+          ]}>
             <View>
                 <Image style={{width:150,height:100}} source={require('../assests/driver.png')}/>
             </View>
